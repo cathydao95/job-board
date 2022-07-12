@@ -1,17 +1,20 @@
-function Jobs({ dataArray }) {
-  console.log(dataArray);
+function Jobs({ item }) {
+  const dataTitle = item.title.includes("(")
+    ? item.title.split(")")
+    : item.title.split(" ");
 
-  const items = dataArray.map((item, index) => {
-    return (
-      <div>
-        <h2>{dataArray[index].title.substring(0, indexOf("is hiring"))}</h2>
-        <p>{dataArray[index].title}</p>
-        <span>Date {dataArray[index].time}</span>
-      </div>
-    );
-  });
+  const companyTitle = dataTitle[0] + ")";
+  const companyText = dataTitle[1];
 
-  return <div>{items}</div>;
+  const postingDate = new Date(item.time * 1000);
+
+  return (
+    <div className="posting">
+      <h2>{companyTitle}</h2>
+      <p>{companyText}</p>
+      <span>{postingDate.toLocaleDateString("en-US")}</span>
+    </div>
+  );
 }
 
 export default Jobs;
