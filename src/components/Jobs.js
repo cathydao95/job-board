@@ -8,8 +8,13 @@ function Jobs({ item }) {
 
   const postingDate = new Date(item.time * 1000);
 
+  function openUrl() {
+    item.url
+      ? window.open(item.url)
+      : window.open(`https://news.ycombinator.com/item?id=${item.id}`);
+  }
   return (
-    <div className="posting">
+    <div onClick={openUrl} className="posting">
       <h2>{companyTitle}</h2>
       <p>{companyText}</p>
       <span>{postingDate.toLocaleDateString("en-US")}</span>
