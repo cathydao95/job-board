@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 function Main() {
   const [data, setData] = useState([]);
   const [dataArray, setDataArray] = useState([]);
+  const [load, setLoad] = useState(9);
 
+  //   on load, fetch all ID data
   useEffect(() => {
     fetch("https://hacker-news.firebaseio.com/v0/jobstories.json")
       .then((res) => res.json())
@@ -12,28 +14,30 @@ function Main() {
   }, []);
 
   useEffect(() => {
-    const testSlice = data.slice(0, 9);
+    const testSlice = data.slice(0, load);
+    console.log(testSlice);
     testSlice.map((item) => {
       fetch(`https://hacker-news.firebaseio.com/v0/item/${item}.json`)
         .then((res) => res.json())
         .then((data) => setDataArray((prevData) => [...prevData, data]));
     });
-  }, [data]);
+  }, [data, load]);
 
-  //   const dataArray = data.map((item) => {
-  //     fetch(`https://hacker-news.firebaseio.com/v0/item/${item}.json`)
-  //       .then((res) => res.json())
-  //       .then((data) => console.log(data));
-  //   });
-
-  console.log(data);
+  function loadMore() {
+    setLoad((prevLoad) => prevLoad + 6);
+  }
 
   return (
     <div>
       <h1>HN Jobs</h1>
-      {dataArray.length > 0 ? <Jobs dataArray={dataArray} /> : null}
+      {/* {dataArray.length > 0 ? <Jobs dataArray={dataArray} /> : null} */}
+      <div className="job-container">
+        {dataArray.length > 0
+          ? dataArray.map((item) => <Jobs item={item} />)
+          : null}
+      </div>
 
-      <button>Load More</button>
+      <button onClick={loadMore}>Load More</button>
     </div>
   );
 }
